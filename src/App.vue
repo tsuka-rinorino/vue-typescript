@@ -1,21 +1,42 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <Post :post="post"/>
   </div>
 </template>
 
+
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from './components/HelloWorld.vue';
+import axios from 'axios';
+import Post from '@/components/Post.vue';
+import PostData from '@/interface/post.d';
+
 
 @Component({
   components: {
-    HelloWorld,
+    Post,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  public post: PostData = {
+    title: '',
+  };
+
+  public endpoint = '/sample-data.json';
+
+  created() {
+    this.getPost();
+  }
+
+  public getPost() {
+    axios.get(this.endpoint)
+      .then((response) => {
+        this.post = response.data;
+      });
+  }
+}
 </script>
+
 
 <style lang="scss">
 #app {
